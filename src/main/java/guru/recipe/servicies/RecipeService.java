@@ -1,7 +1,9 @@
 package guru.recipe.servicies;
 
+import guru.recipe.command.RecipeCommand;
 import guru.recipe.domain.Recipe;
 
+import javax.transaction.Transactional;
 import java.util.Set;
 
 /**
@@ -11,4 +13,7 @@ public interface RecipeService {
     Set<Recipe> getRecipes ();
 
     Recipe getRecipeById(long id);
+
+    @Transactional
+    RecipeCommand saveRecipeCommand(RecipeCommand command);
 }
