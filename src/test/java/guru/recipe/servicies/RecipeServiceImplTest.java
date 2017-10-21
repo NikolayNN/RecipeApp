@@ -70,4 +70,14 @@ public class RecipeServiceImplTest {
         verify(recipeRepository, times(1)).findById(anyLong());
         verifyNoMoreInteractions(recipeRepository);
     }
+
+    @Test
+    public void deleteRecipeTest() throws Exception {
+        //given
+        Long idToDelete = 2L;
+        //when
+        recipeRepository.deleteById(idToDelete);
+        //then
+        verify(recipeRepository, times(1)).deleteById(idToDelete);
+    }
 }
