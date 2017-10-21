@@ -12,8 +12,9 @@ import java.util.Set;
 public interface RecipeService {
     Set<Recipe> getRecipes ();
 
-    Recipe getRecipeById(long id);
+    Recipe findRecipeById(long id);
 
-    @Transactional
     RecipeCommand saveRecipeCommand(RecipeCommand command);
+
+    RecipeCommand findCommandById(Long id);
 }

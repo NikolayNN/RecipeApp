@@ -6,8 +6,8 @@ import guru.recipe.converters.RecipeToRecipeCommand;
 import guru.recipe.domain.Recipe;
 import guru.recipe.repositories.RecipeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -37,7 +37,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe getRecipeById(long id) {
+    public Recipe findRecipeById(long id) {
         Optional<Recipe> recipe = recipeRepository.findById(id);
         if (!recipe.isPresent()) {
             throw new RuntimeException("Recipe not found!");
@@ -52,5 +52,11 @@ public class RecipeServiceImpl implements RecipeService {
 
         Recipe savedRecipe = recipeRepository.save(detachedRecipe);
         return recipeToRecipeCommand.convert(savedRecipe);
+    }
+
+    @Override
+    @Transactional
+    public RecipeCommand findCommandById(Long id) {
+        return  recipeToRecipeCommand.convert(findRecipeById(id));
     }
 }
