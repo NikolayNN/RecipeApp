@@ -33,7 +33,9 @@
                                     <li th:remove="all">category 1</li>
                                     <li th:remove="all">category 2</li>
                                     <!--/*@thymesVar id="recipe" type="guru.recipe.domain.Recipe"*/-->
-                                    <li th:each="category : ${recipe.categories}" th:text="${category.description}">category 3</li>
+                                    <li th:each="category : ${recipe.categories}" th:text="${category.description}">
+                                        category 3
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -83,7 +85,14 @@
                 </div>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h1 class="panel-title">Ingredients</h1>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <h1 class="panel-title">Ingredients</h1>
+                            </div>
+                            <div class="col-md-2">
+                                <a class="btn btn-default" href="#" th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}" role="button">View</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="panel-body">
                         <div class="row">
@@ -92,7 +101,10 @@
                                     <li th:remove="all">ingredient 1</li>
                                     <li th:remove="all">ingredient 2</li>
                                     <!--/*@thymesVar id="recipe" type="guru.recipe.domain.Recipe"*/-->
-                                    <li th:each="ingredient : ${recipe.ingredients}" th:text="${ingredient.amount + ' ' + ingredient.unitOfMeasure.description + ' - ' + ingredient.description}">ingredient 3</li>
+                                    <li th:each="ingredient : ${recipe.ingredients}"
+                                        th:text="${ingredient.amount + ' ' + ingredient.unitOfMeasure.description + ' - ' + ingredient.description}">
+                                        ingredient 3
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -105,7 +117,8 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <p th:text="${recipe.directions}">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
+                                <p th:text="${recipe.directions}">Lorem ipsum dolor sit amet, consectetuer adipiscing
+                                    elit. Aenean commodo ligula eget
                                     dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes,
                                     nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium
                                     quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet
@@ -130,7 +143,8 @@
                         <div class="row">
                             <div class="col-md-12">
 
-                                <p th:text="${recipe.notes.recipeNotes}">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget
+                                <p th:text="${recipe.notes.recipeNotes}">Lorem ipsum dolor sit amet, consectetuer
+                                    adipiscing elit. Aenean commodo ligula eget
                                     dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes,
                                     nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium
                                     quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet
