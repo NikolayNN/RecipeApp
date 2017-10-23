@@ -7,4 +7,6 @@ import guru.recipe.command.IngredientCommand;
  */
 public interface IngredientService {
     IngredientCommand findByRecipeIdAndIngredientId(long recipeId, long ingredientId);
+
+    IngredientCommand saveIngredient(IngredientCommand ingredientCommand);
 }

@@ -2,8 +2,10 @@ package guru.recipe.controllers;
 
 import guru.recipe.command.IngredientCommand;
 import guru.recipe.command.RecipeCommand;
+import guru.recipe.domain.UnitOfMeasure;
 import guru.recipe.servicies.IngredientService;
 import guru.recipe.servicies.RecipeService;
+import guru.recipe.servicies.UnitOfMeasureService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -30,13 +32,15 @@ public class IngredientControllerTest {
     RecipeService recipeService;
     @Mock
     IngredientService ingredientService;
+    @Mock
+    UnitOfMeasureService unitOfMeasureService;
     IngredientController controller;
     MockMvc mockMvc;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        controller = new IngredientController(recipeService, ingredientService);
+        controller = new IngredientController(recipeService, ingredientService, unitOfMeasureService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
