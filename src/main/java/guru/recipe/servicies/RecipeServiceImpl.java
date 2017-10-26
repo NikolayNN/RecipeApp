@@ -37,6 +37,12 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @Transactional
+    public RecipeCommand findRecipeCommandById(long id) {
+        return recipeToRecipeCommand.convert(findRecipeById(id));
+    }
+
+    @Override
     public Recipe findRecipeById(long id) {
         Optional<Recipe> recipe = recipeRepository.findById(id);
         if (!recipe.isPresent()) {

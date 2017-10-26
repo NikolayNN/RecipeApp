@@ -1,7 +1,8 @@
 package guru.recipe.controllers;
 
 import guru.recipe.command.IngredientCommand;
-import guru.recipe.domain.Ingredient;
+import guru.recipe.command.RecipeCommand;
+import guru.recipe.command.UnitOfMeasureCommand;
 import guru.recipe.servicies.IngredientService;
 import guru.recipe.servicies.RecipeService;
 import guru.recipe.servicies.UnitOfMeasureService;
@@ -50,6 +51,21 @@ public class IngredientController {
         model.addAttribute("uomList", unitOfMeasureService.listAllUnitOfMeasure());
         model.addAttribute("ingredient",
                 ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(ingredientId)));
+
+        return "recipe/ingredient/ingredientform";
+    }
+
+    @GetMapping
+    @RequestMapping("recipe/{recipeId}/ingredient/new")
+    public String createRecipeIngredient(@PathVariable String recipeId, Model model){
+
+        RecipeCommand recipeCommand = recipeService.findRecipeCommandById(Long.valueOf(recipeId));
+
+        IngredientCommand ingredientCommand = new IngredientCommand();
+        ingredientCommand.setRecipeId(Long.valueOf(recipeId));
+        ingredientCommand.setUnitOfMeasure(new UnitOfMeasureCommand());
+        model.addAttribute("uomList", unitOfMeasureService.listAllUnitOfMeasure());
+        model.addAttribute("ingredient", ingredientCommand);
 
         return "recipe/ingredient/ingredientform";
     }
