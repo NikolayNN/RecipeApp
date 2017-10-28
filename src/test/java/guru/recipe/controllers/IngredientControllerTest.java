@@ -2,7 +2,6 @@ package guru.recipe.controllers;
 
 import guru.recipe.command.IngredientCommand;
 import guru.recipe.command.RecipeCommand;
-import guru.recipe.domain.UnitOfMeasure;
 import guru.recipe.servicies.IngredientService;
 import guru.recipe.servicies.RecipeService;
 import guru.recipe.servicies.UnitOfMeasureService;
@@ -47,14 +46,14 @@ public class IngredientControllerTest {
     @Test
     public void testListIngredients() throws Exception {
         RecipeCommand recipeCommand = new RecipeCommand();
-        when(recipeService.findCommandById(anyLong())).thenReturn(recipeCommand);
+        when(recipeService.findRecipeCommandById(anyLong())).thenReturn(recipeCommand);
 
         mockMvc.perform(get("/recipe/1/ingredients"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/ingredient/list"))
                 .andExpect(model().attributeExists("recipe"));
 
-        verify(recipeService, times(1)).findCommandById(anyLong());
+        verify(recipeService, times(1)).findRecipeCommandById(anyLong());
     }
 
     @Test
@@ -67,5 +66,23 @@ public class IngredientControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/ingredient/show"))
                 .andExpect(model().attributeExists("ingredient"));
+    }
+
+    @Test
+    public void testDeleteIngredient() throws Exception {
+        final Long recipeId = 1L;
+        final Long ingredientId = 3L;
+
+        IngredientCommand ingredientCommand = new IngredientCommand();
+        ingredientCommand.setId(ingredientId);
+        ingredientCommand.setRecipeId(recipeId);
+
+        when(recipeService.findRecipeCommandById(1L)).thenReturn(new RecipeCommand());
+
+        mockMvc.perform(get("/recipe/" + recipeId +"/ingredient/" + ingredientId + "/delete"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/recipe/" + recipeId + "/ingredients"));
+
+        verify(ingredientService, times(1)).deleteIngredientByRecipeIdAndIngredientId(recipeId, ingredientId);
     }
 }

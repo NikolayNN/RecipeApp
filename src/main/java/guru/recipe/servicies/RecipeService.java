@@ -12,14 +12,11 @@ import java.util.Set;
 public interface RecipeService {
     Set<Recipe> getRecipes ();
 
-    @org.springframework.transaction.annotation.Transactional
-    RecipeCommand findRecipeCommandById(long id);
-
     Recipe findRecipeById(long id);
 
     RecipeCommand saveRecipeCommand(RecipeCommand command);
 
-    RecipeCommand findCommandById(Long id);
+    RecipeCommand findRecipeCommandById(Long id);
 
     void deleteRecipeById(Long id);
 }

@@ -10,7 +10,11 @@ import guru.recipe.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * @author Nikolay Horushko
@@ -92,5 +96,31 @@ public class IngredientServiceImpl implements IngredientService {
             }
             return ingredientToIngredientCommand.convert(savedIngredientOptional.get());
         }
+    }
+
+    @Override
+    public void deleteIngredientByRecipeIdAndIngredientId(Long recipeId, Long ingredientId) {
+
+        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+
+        if (!recipeOptional.isPresent()) {
+            throw new RuntimeException(String.format("Recipe not found id: %d", recipeId));
+        }
+
+        Recipe recipe = recipeOptional.get();
+
+        Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
+                .filter(ingredient -> ingredient.getId().equals(ingredientId))
+                .findFirst();
+
+        if (!ingredientOptional.isPresent()) {
+            throw new RuntimeException("ingredient not found id:" + ingredientId);
+        }
+        Ingredient ingredientToDelete = ingredientOptional.get();
+        ingredientToDelete.setRecipe(null);
+        recipe.getIngredients().remove(ingredientOptional.get());
+
+        recipeRepository.save(recipe);
+
     }
 }

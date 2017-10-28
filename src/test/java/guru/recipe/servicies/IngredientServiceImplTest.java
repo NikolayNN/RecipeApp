@@ -14,6 +14,7 @@ import guru.recipe.repositories.RecipeRepository;
 import guru.recipe.repositories.UnitOfMeasureRepository;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -23,9 +24,7 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Nikolay Horushko
@@ -133,5 +132,34 @@ public class IngredientServiceImplTest {
         assertEquals(Long.valueOf(3L), savedCommand.getId());
         verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, times(1)).save(any(Recipe.class));
+    }
+
+    @Test
+    public void testDeleteIngredient() throws Exception {
+
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+        Ingredient ingredient1 = new Ingredient();
+        ingredient1.setId(2L);
+        ingredient1.setDescription("test ingredient");
+        Ingredient ingredient2 = new Ingredient();
+        ingredient2.setId(3L);
+        ingredient2.setDescription("ingredient for delete");
+        recipe.addIngredient(ingredient1);
+        recipe.addIngredient(ingredient2);
+        Optional<Recipe> recipeOptional = Optional.of(recipe);
+        ArgumentCaptor<Recipe> recipeCaptor = ArgumentCaptor.forClass(Recipe.class);
+
+        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+        when(recipeRepository.save(any())).thenReturn(new Recipe());
+
+        ingredientService.deleteIngredientByRecipeIdAndIngredientId(1L, 3L);
+
+        verify(recipeRepository, times(1)).findById(1L);
+        verify(recipeRepository, times(1)).save(recipeCaptor.capture());
+        verifyNoMoreInteractions(recipeRepository);
+
+        assertEquals(1, recipeCaptor.getValue().getIngredients().size());
+        assertEquals("test ingredient", recipeCaptor.getValue().getIngredients().iterator().next().getDescription());
     }
 }
