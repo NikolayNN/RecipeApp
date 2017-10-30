@@ -1,6 +1,7 @@
 package guru.recipe.controllers;
 
 import guru.recipe.domain.Recipe;
+import guru.recipe.exceptions.NotFoundException;
 import guru.recipe.servicies.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,6 +46,19 @@ public class RecipeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/show"))
                 .andExpect(model().attributeExists("recipe"));
+    }
+
+    @Test
+    public void get404ErrorIfRecipeNotFound() throws Exception {
+        Recipe recipe = new Recipe();
+        recipe.setId(1L);
+
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
+
+        when(recipeService.findRecipeById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/show/999"))
+                .andExpect(status().isNotFound());
     }
 
 }

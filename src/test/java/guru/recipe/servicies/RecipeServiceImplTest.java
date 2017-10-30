@@ -3,6 +3,7 @@ package guru.recipe.servicies;
 import guru.recipe.converters.RecipeCommandToRecipe;
 import guru.recipe.converters.RecipeToRecipeCommand;
 import guru.recipe.domain.Recipe;
+import guru.recipe.exceptions.NotFoundException;
 import guru.recipe.repositories.RecipeRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -67,6 +68,17 @@ public class RecipeServiceImplTest {
         Recipe actualRecipe = recipeService.findRecipeById(1L);
 
         assertNotNull("Null recipe returned", actualRecipe);
+        verify(recipeRepository, times(1)).findById(anyLong());
+        verifyNoMoreInteractions(recipeRepository);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void throwNotFoundException() throws Exception {
+
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        recipeService.findRecipeById(1L);
+
         verify(recipeRepository, times(1)).findById(anyLong());
         verifyNoMoreInteractions(recipeRepository);
     }

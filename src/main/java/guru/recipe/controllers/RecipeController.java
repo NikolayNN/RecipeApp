@@ -22,15 +22,16 @@ public class RecipeController {
     @GetMapping("/recipe/{id}/show/")
     public String getRecipeById(@PathVariable Long id, Model model){
 
-        Recipe recipe = recipeService.findRecipeById(id);
+        RecipeCommand recipeCommand = recipeService.findRecipeCommandById(id);
 
-        model.addAttribute("recipe", recipe);
+        model.addAttribute("recipe", recipeCommand);
 
         return "recipe/show";
     }
 
     @GetMapping("recipe/new")
     public String newRecipe(Model model){
+
         model.addAttribute("recipe", new RecipeCommand());
 
         return "recipe/recipeform";
@@ -38,6 +39,7 @@ public class RecipeController {
 
     @GetMapping("recipe/{id}/update")
     public String updateRecipe(@PathVariable Long id, Model model){
+
         model.addAttribute("recipe", recipeService.findRecipeCommandById(Long.valueOf(id)));
 
         return "recipe/recipeform";
