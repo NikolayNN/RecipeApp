@@ -73,4 +73,17 @@ public class RecipeControllerTest {
                 .andExpect(view().name("404error"));
     }
 
+    @Test
+    public void get400ErrorPage() throws Exception {
+
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
+
+        when(recipeService.findRecipeCommandById(anyLong())).thenThrow(NumberFormatException.class);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/sss/show/"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("400error"))
+                .andExpect(model().attributeExists("exception"));
+    }
+
 }
