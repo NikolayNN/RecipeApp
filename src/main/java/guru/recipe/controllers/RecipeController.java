@@ -2,15 +2,20 @@ package guru.recipe.controllers;
 
 import guru.recipe.command.RecipeCommand;
 import guru.recipe.domain.Recipe;
+import guru.recipe.exceptions.NotFoundException;
 import guru.recipe.servicies.RecipeService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author Nikolay Horushko
  */
 @Controller
+@Slf4j
 public class RecipeController {
 
     private final RecipeService recipeService;
@@ -57,5 +62,15 @@ public class RecipeController {
         RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
 
         return "redirect:/recipe/" + savedCommand.getId() + "/show/";
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public ModelAndView notFoundErrorPage(Exception exception){
+        log.error("Handling not Found exception");
+        ModelAndView model = new ModelAndView();
+        model.addObject("exception", exception);
+        model.setViewName("404error");
+        return model;
     }
 }

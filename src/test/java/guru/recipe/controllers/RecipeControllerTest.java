@@ -61,4 +61,16 @@ public class RecipeControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    public void get404ErrorPage() throws Exception {
+
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
+
+        when(recipeService.findRecipeCommandById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/888/show/"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("404error"));
+    }
+
 }
