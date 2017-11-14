@@ -1,5 +1,6 @@
 package guru.recipe.controllers;
 
+import guru.recipe.command.RecipeCommand;
 import guru.recipe.domain.Recipe;
 import guru.recipe.exceptions.NotFoundException;
 import guru.recipe.servicies.RecipeService;
@@ -35,14 +36,14 @@ public class RecipeControllerTest {
 
     @Test
     public void getRecipeById() throws Exception {
-        Recipe recipe = new Recipe();
-        recipe.setId(1L);
+        RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setId(1L);
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
 
-        when(recipeService.findRecipeById(anyLong())).thenReturn(recipe);
+        when(recipeService.findRecipeCommandById(anyLong())).thenReturn(recipeCommand);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/show/1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/show"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/show"))
                 .andExpect(model().attributeExists("recipe"));
@@ -76,7 +77,9 @@ public class RecipeControllerTest {
     @Test
     public void get400ErrorPage() throws Exception {
 
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController)
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
 
         when(recipeService.findRecipeCommandById(anyLong())).thenThrow(NumberFormatException.class);
 
